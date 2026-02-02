@@ -1,18 +1,15 @@
 <div align="center">
 
-# Flash Bi-directional Linear Attention
+# Flash Bidirectional Linear Attention
 
 </div>
 
-The aim of this repository is to implement **bi-directional linear attention** for **non-causal** modeling using Triton.
+The aim of this repository is to implement **bidirectional linear attention** for **non-causal** modeling using Triton. Contributions and suggestions are welcome!
 
 <div align="center">
   <img width="600" alt="image" src="https://res.cloudinary.com/dunty6aot/image/upload/v1735544947/387246938-cd89a618-5d54-41b7-9055-36ba28b29fbd-2_tailvo.png">
 </div>
 
-
-
-This project is currently maintained by an individual and remains a work in progress. As the maintainer is still in the early stages of learning Triton, many implementations may not be optimal. **Contributions and suggestions are welcome!**
 
 # Update
 * [2025-02-04] Updated PolaFormer
@@ -20,7 +17,7 @@ This project is currently maintained by an individual and remains a work in prog
 * [2024-12-28] Updated `simple_la`, which is a simple form of `linear_attn` without the norm term.
 
 # Models
-Roughly sorted according to the timeline supported in FBi-LA
+Roughly sorted according to the timeline supported in `flash_bla`
 
 | Year    | Model     | Title                                                                  | Paper                                     | Code                                                          | `fla` impl                                                                                                           |
 | :------ | :-------- | :--------------------------------------------------------------------- | :---------------------------------------: | :-----------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: |
@@ -45,7 +42,7 @@ This library has integrated some models, which can be called directly. Taking [L
 ``` python
 import torch
 from diffusers import AutoPipelineForText2Image
-from fbi_la.models import LinFusion
+from flash_bla.models import LinFusion
 
 sd_repo = "Lykon/dreamshaper-8"
 
@@ -80,11 +77,7 @@ B8-H16-D64:
   <img width="600" alt="image" src="https://res.cloudinary.com/dunty6aot/image/upload/v1735545026/817a5a20-2cc5-48e8-b8dd-01b63753926b_mbbnfk.png">
 </div>
 
-# TODO
-- improve memory efficiency during backpropagation
-- implement more models
-  - VSSD
-  - RALA
+
 
 # Acknowledgments
 Thanks to the following repositories for their inspiration:

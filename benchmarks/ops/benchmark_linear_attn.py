@@ -4,14 +4,8 @@ import torch
 import triton
 from torch.nn import functional as F
 
-import os
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '/public/liguoqi/ssl/wds/flash-bidirectional-linear-attention/')))
-
-
-from fbi_la.ops.linear_attn.attention import linear_attention
-from fbi_la.ops.linear_attn.attention_fused2 import linear_attention as linear_attention_split
-from fbi_la.ops.linear_attn.naive import naive_linear_attn
+from flash_bla.ops.linear_attn.fused import linear_attention
+from flash_bla.ops.linear_attn.naive import naive_linear_attn
 
 
 @triton.testing.perf_report(
