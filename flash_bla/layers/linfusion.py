@@ -17,7 +17,7 @@ import torch
 import torch.nn.functional as F
 from diffusers.models.attention_processor import Attention
 
-from fbi_la.ops.linear_attn.attention import linear_attention
+from flash_bla.ops.linear_attn.fused import linear_attention
 
 from einops import rearrange
 
@@ -96,7 +96,7 @@ class GeneralizedLinearAttention(Attention):
         elif mode == 'triton':
             query, key, value = map(lambda x: rearrange(x, '(b h) l d -> b h l d', h=self.heads), [query, key, value])
 
-            hidden_states = linear_attention(query, key, value)
+            hidden_states = linear_attention(query, key, value, eps=1e-4)
             
             hidden_states = rearrange(hidden_states, 'b h l d -> (b h) l d')
         else:

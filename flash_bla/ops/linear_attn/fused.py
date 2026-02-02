@@ -1,3 +1,5 @@
+# Copyright (c) 2024 - 2026 Haopeng Li
+
 from typing import Optional, Tuple
 
 import torch
@@ -7,17 +9,17 @@ import torch.nn.functional as F
 import triton
 import triton.language as tl
 
-from fbi_la.utils import contiguous
+from flash_bla.utils import contiguous
 
 
 @triton.autotune(
     configs=[
         triton.Config({'BL': BL, 'BK': BK, 'BV': BV}, num_warps=num_warps, num_stages=num_stages)
         for BL in [32, 64, 128]
-        for BK in [64]
-        for BV in [64]
-        for num_warps in [2, 4, 8]
-        for num_stages in [2]
+        for BK in [32, 64]
+        for BV in [32, 64]
+        for num_warps in [1, 2, 4, 8]
+        for num_stages in [2, 3, 4]
     ],
     key=['L']
 )
@@ -90,9 +92,9 @@ def fused_fwd_kernel_s_km(
     configs=[
         triton.Config({'BL': BL, 'BK': BK, 'BV': BV}, num_warps=num_warps, num_stages=num_stages)
         for BL in [32, 64, 128]
-        for BK in [64]
-        for BV in [64]
-        for num_warps in [2, 4, 8]
+        for BK in [32, 64]
+        for BV in [32, 64]
+        for num_warps in [1, 2, 4, 8]
         for num_stages in [2, 3, 4]
     ],
     key=['L']

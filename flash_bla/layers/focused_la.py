@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from functools import partial
 from einops import rearrange
 
-from fbi_la.ops.linear_attn.attention import linear_attention
+from flash_bla.ops.linear_attn.fused import linear_attention
 
 
 class FocusedLinearAttention(nn.Module):

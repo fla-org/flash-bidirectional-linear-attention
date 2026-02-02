@@ -2,27 +2,26 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from fbi_la.ops.linear_attn.attention import linear_attention
+from fbi_la.ops.simple_la.attention import simple_la
 
 
-def naive_linear_attn(
+def naive_simple_la(
     q,
     k,
     v,
     scale = None
 ):
     if scale is None:
-        scale = k.shape[-2] ** -1.0
+        scale = q.shape[-1] ** -0.5
         
-    z = q @ k.mean(dim=-2, keepdim=True).transpose(-2, -1)
     s = k.transpose(-2, -1) @ (v * scale)
-    o = q @ s / (z + 1e-6)
+    o = q @ s
     
     return o
 
 
 def check_close(A, B):
-    b = torch.allclose(A, B, rtol=0, atol=1e-3)
+    b = torch.allclose(A, B, rtol=0, atol=1e-2)
     return b
 
 
@@ -38,9 +37,10 @@ if __name__ == "__main__":
     k = F.elu(k) + 1.0
     
     do = torch.randn_like(v)
+    ds = torch.randn_like(k.transpose(-2, -1) @ v)
     
-    # torch
-    ref = naive_linear_attn(q, k, v)
+    # naive
+    ref = naive_simple_la(q, k, v)
     
     q.retain_grad(), k.retain_grad(), v.retain_grad()
     ref.backward(do, retain_graph=True)
@@ -50,10 +50,12 @@ if __name__ == "__main__":
     ref_dv, v.grad = v.grad.clone(), None
     
     # triton
-    tri = linear_attention(q, k, v)
+    # tri = simple_la(q, k, v)
+    tri, s = simple_la(q, k, v, retuen_states=True)
     
     q.retain_grad(), k.retain_grad(), v.retain_grad()
-    tri.backward(do, retain_graph=True)
+    # tri.backward(do, retain_graph=True)
+    ((tri * do).sum() + (ds * s).sum()).backward()
     
     tri_dq, q.grad = q.grad.clone(), None
     tri_dk, k.grad = k.grad.clone(), None
@@ -65,4 +67,3 @@ if __name__ == "__main__":
     assert check_close(ref_dv, tri_dv)
     
     print("Triton and Torch match")
-    

@@ -9,9 +9,8 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '/public/liguoqi/ssl/wds/flash-bidirectional-linear-attention/')))
 
 
-from fbi_la.ops.linear_attn.attention import linear_attention
-from fbi_la.ops.linear_attn.attention_fused2 import linear_attention as linear_attention_split
-from fbi_la.ops.linear_attn.naive import naive_linear_attn
+from fbi_la.ops.simple_la.attention import simple_la
+from fbi_la.ops.simple_la.naive import naive_simple_la
 
 
 @triton.testing.perf_report(
@@ -19,15 +18,15 @@ from fbi_la.ops.linear_attn.naive import naive_linear_attn
         # argument names to use as an x-axis for the plot
         x_names=['T'],
         # different possible values for `x_name`
-        x_vals=[128 * 2 ** i for i in range(0, 3)],
+        x_vals=[128 * 2 ** i for i in range(0, 4)],
         # argument name whose value corresponds to a different line in the plot
         line_arg='provider',
         # possible values for `line_arg``
-        line_vals=['torch_fwd', 'triton_fwd', 'fa_fwd', 'torch_bwd', 'triton_bwd', 'fa_bwd'],
+        line_vals=['torch_fwd', 'triton_fwd', 'torch_bwd', 'triton_bwd'],
         # label name for the lines
-        line_names=['torch_fwd', 'triton_fwd', 'fa_fwd', 'torch_bwd', 'triton_bwd', 'fa_bwd'],
+        line_names=['torch_fwd', 'triton_fwd', 'torch_bwd', 'triton_bwd'],
         # line styles
-        styles=[('green', '-'), ('blue', '--'), ('red', '-.'), ('cyan', ':'), ('cyan', ':'), ('cyan', ':')],
+        styles=[('green', '-'), ('blue', '--'), ('red', '-.'), ('cyan', ':')],
         ylabel="Execution Time (ms)",  # label name for the y-axis
         # name for the plot. Used also as a file name for saving the plot.
         plot_name="B8-H16-D64",
@@ -50,22 +49,16 @@ def benchmark(T, provider):
     results = 0, 0, 0
     if provider == 'torch_fwd':
         # pass
-        results = triton.testing.do_bench(lambda: naive_linear_attn(q, k, v), quantiles=quantiles)
+        results = triton.testing.do_bench(lambda: naive_simple_la(q, k, v), quantiles=quantiles)
     elif provider == 'triton_fwd':
         # pass
-        results = triton.testing.do_bench(lambda: linear_attention(q, k, v), quantiles=quantiles)
-    elif provider == 'fa_fwd':
-        # pass
-        results = triton.testing.do_bench(lambda: F.scaled_dot_product_attention(q, k, v, attn_mask=None, is_causal=False), quantiles=quantiles)
+        results = triton.testing.do_bench(lambda: simple_la(q, k, v), quantiles=quantiles)
     elif provider == 'torch_bwd':
         # pass
-        results = triton.testing.do_bench(lambda: naive_linear_attn(q, k, v).backward(do), quantiles=quantiles)
+        results = triton.testing.do_bench(lambda: naive_simple_la(q, k, v).backward(do), quantiles=quantiles)
     elif provider == 'triton_bwd':
         # pass
-        results = triton.testing.do_bench(lambda: linear_attention(q, k, v).backward(do), quantiles=quantiles)
-    elif provider == 'fa_bwd':
-        # pass
-        results = triton.testing.do_bench(lambda: F.scaled_dot_product_attention(q, k, v, attn_mask=None, is_causal=False).backward(do), quantiles=quantiles)
+        results = triton.testing.do_bench(lambda: simple_la(q, k, v).backward(do), quantiles=quantiles)
     return results
 
 

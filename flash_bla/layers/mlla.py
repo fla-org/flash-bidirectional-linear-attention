@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 
-from fbi_la.ops.simple_la.attention import simple_la
+from flash_bla.ops.simple_la.fused import simple_la
 
 
 class RoPE(torch.nn.Module):
