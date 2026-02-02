@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from fbi_la.ops.linear_attn.attention import linear_attention
+from flash_bla.ops.linear_attn.fused import linear_attention
 
 
 def naive_linear_attn(

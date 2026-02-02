@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from fbi_la.ops.simple_la.attention import simple_la
+from flash_bla.ops.simple_la.fused import simple_la
 
 
 def naive_simple_la(
