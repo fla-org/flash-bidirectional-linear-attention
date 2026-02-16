@@ -25,7 +25,7 @@ Roughly sorted according to the timeline supported in `flash_bla`
 | 2024 | MLLA      | Demystify Mamba in Vision: A Linear Attention Perspective              | [arxiv](https://arxiv.org/abs/2405.16605) | [official](https://github.com/LeapLabTHU/MLLA)                | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/mlla.py)                |
 | 2023 | Focused-LA| FLatten Transformer: Vision Transformer using Focused Linear Attention | [arxiv](https://arxiv.org/abs/2308.00442) | [official](https://github.com/LeapLabTHU/FLatten-Transformer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/focused_la.py)          |
 | 2025 | PolaFormer| PolaFormer: Polarity-aware Linear Attention for Vision Transformers    | [arxiv](https://arxiv.org/abs/2501.15061) | [official](https://github.com/ZacharyMeng/PolaFormer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/polaformer.py)                 |
-
+| 2025 | RALA| Breaking the Low-Rank Dilemma of Linear Attention   | [arxiv](https://arxiv.org/abs/2411.07635) | [official](https://github.com/qhfan/RALA) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/rala.py)                 |
 More models will be implemented gradually.
 
 
