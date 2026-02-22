@@ -12,9 +12,9 @@ The aim of this repository is to implement **bidirectional linear attention** fo
 
 
 # Update
-* [2025-02-04] Updated PolaFormer
-* [2024-12-30] Optimized the backpropagation speed of the `linear attn`.
-* [2024-12-28] Updated `simple_la`, which is a simple form of `linear_attn` without the norm term.
+* [2026/02] Update PISA
+* [2025/02] Update PolaFormer
+* [2024/12] Update `simple_la`, a simple form of `linear_attn` without the norm term.
 
 # Models
 Roughly sorted according to the timeline supported in `flash_bla`
@@ -25,9 +25,7 @@ Roughly sorted according to the timeline supported in `flash_bla`
 | 2024 | MLLA      | Demystify Mamba in Vision: A Linear Attention Perspective              | [arxiv](https://arxiv.org/abs/2405.16605) | [official](https://github.com/LeapLabTHU/MLLA)                | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/mlla.py)                |
 | 2023 | Focused-LA| FLatten Transformer: Vision Transformer using Focused Linear Attention | [arxiv](https://arxiv.org/abs/2308.00442) | [official](https://github.com/LeapLabTHU/FLatten-Transformer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/focused_la.py)          |
 | 2025 | PolaFormer| PolaFormer: Polarity-aware Linear Attention for Vision Transformers    | [arxiv](https://arxiv.org/abs/2501.15061) | [official](https://github.com/ZacharyMeng/PolaFormer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/polaformer.py)                 |
-
-More models will be implemented gradually.
-
+| 2026 | PISA      | PISA: Piecewise Sparse Attention Is Wiser for Efficient Diffusion Transformers               | [arxiv](https://arxiv.org/abs/2602.01077) | [official](https://github.com/xie-lab-ml/piecewise-sparse-attention)               | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/ops/piecewise_attn/kernel.py)                
 
 # Usage
 
