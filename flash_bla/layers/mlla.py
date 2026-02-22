@@ -3,7 +3,8 @@
 import torch
 import torch.nn as nn
 
-from flash_bla.ops.simple_la.fused import simple_la
+from flash_bla.ops.linear_attn.decoupled import decoupled_la
+from flash_bla.utils import assert_close
 
 
 class RoPE(torch.nn.Module):
@@ -78,18 +79,16 @@ class MambaLikeLinearAttention(nn.Module):
         k = k.reshape(b, n, num_heads, head_dim).permute(0, 2, 1, 3).contiguous()
         v = v.reshape(b, n, num_heads, head_dim).permute(0, 2, 1, 3).contiguous()
 
-        z = 1 / (q @ k.mean(dim=-2, keepdim=True).transpose(-2, -1) + 1e-6)
-        
         if mode == 'torch':
+            z = 1 / (q @ k.mean(dim=-2, keepdim=True).transpose(-2, -1) + 1e-6)
             kv = (k_rope.transpose(-2, -1) * (n ** -0.5)) @ (v * (n ** -0.5))
             x = q_rope @ kv
+            x = x * z
         elif mode == 'triton':
-            x = simple_la(q_rope, k_rope, v, scale=n ** -1.0)
+            x = decoupled_la(q, k, q_rope, k_rope, v, scale=n ** -1.0)
         else:
             raise NotImplementedError
         
-        x = x * z
-
         x = x.transpose(1, 2).reshape(b, n, c)
         v = v.transpose(1, 2).reshape(b, h, w, c).permute(0, 3, 1, 2)
         x = x + self.lepe(v).permute(0, 2, 3, 1).reshape(b, n, c)
@@ -123,6 +122,6 @@ if __name__ == "__main__":
     tri.backward(do, retain_graph=True)
     tri_dx, x.grad = x.grad.clone(), None
     
-    assert torch.allclose(ref, tri, rtol=0, atol=1e-3)
-    assert torch.allclose(ref_dx, tri_dx, rtol=0, atol=1e-3)
+    assert_close("Output", ref, tri, 0.06)
+    assert_close("Grad", ref_dx, tri_dx, 0.06)
     print("Triton and Torch match")

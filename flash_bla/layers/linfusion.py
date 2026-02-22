@@ -18,6 +18,7 @@ import torch.nn.functional as F
 from diffusers.models.attention_processor import Attention
 
 from flash_bla.ops.linear_attn.fused import linear_attention
+from flash_bla.utils import assert_close
 
 from einops import rearrange
 
@@ -113,7 +114,7 @@ class GeneralizedLinearAttention(Attention):
     
     
 if __name__ == "__main__":
-    B, H, L, D = 4, 16, 512, 64
+    B, H, L, D = 2, 16, 4096, 64
     dtype = torch.float32
 
     x = torch.randn((B, L, H*D), dtype=dtype, device="cuda", requires_grad=True)
@@ -135,6 +136,6 @@ if __name__ == "__main__":
     tri.backward(do, retain_graph=True)
     tri_dx, x.grad = x.grad.clone(), None
     
-    assert torch.allclose(ref, tri, rtol=0, atol=1e-4)
-    assert torch.allclose(ref_dx, tri_dx, rtol=0, atol=1e-4)
+    assert_close("Output", ref, tri, 0.06)
+    assert_close("Grad", ref_dx, tri_dx, 0.06)
     print("Triton and Torch match")

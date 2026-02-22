@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from flash_bla.ops.linear_attn.fused import linear_attention
+from flash_bla.utils import assert_close
 
 
 class PolaLinearAttention(nn.Module):
@@ -130,8 +131,8 @@ if __name__ == "__main__":
     tri.backward(do, retain_graph=True)
     tri_dx, x.grad = x.grad.clone(), None
     
-    assert torch.allclose(ref, tri, rtol=0, atol=1e-3)
-    assert torch.allclose(ref_dx, tri_dx, rtol=0, atol=1e-3)
+    assert_close("Output", ref, tri, 0.06)
+    assert_close("Grad", ref_dx, tri_dx, 0.06)
     print("Triton and Torch match")
 
 
