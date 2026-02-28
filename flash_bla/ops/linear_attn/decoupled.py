@@ -175,7 +175,7 @@ def fused_fwd_kernel_o(
         Q_block_ptr = tl.advance(Q_block_ptr, (0, BK))
         Q_ROPE_block_ptr = tl.advance(Q_ROPE_block_ptr, (0, BK))
         S_block_ptr = tl.advance(S_block_ptr, (BK, 0))
-        KM_block_ptr = KM_block_ptr + tl.arange(0, BK)
+        KM_block_ptr += BK
         
     o = o / (z[:, None] + eps)
 
