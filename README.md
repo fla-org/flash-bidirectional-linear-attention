@@ -23,7 +23,6 @@ Roughly sorted according to the timeline supported in `flash_bla`
 | :------ | :-------- | :--------------------------------------------------------------------- | :---------------------------------------: | :-----------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: |
 | 2024 | Linfusion | LinFusion: 1 GPU, 1 Minute, 16K Image                                  | [arxiv](https://arxiv.org/abs/2409.02097) | [official](https://github.com/Huage001/LinFusion)             | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/layers/linfusion.py)           |
 | 2024 | MLLA      | Demystify Mamba in Vision: A Linear Attention Perspective              | [arxiv](https://arxiv.org/abs/2405.16605) | [official](https://github.com/LeapLabTHU/MLLA)                | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/layers/mlla.py)                |
-| 2023 | Focused-LA| FLatten Transformer: Vision Transformer using Focused Linear Attention | [arxiv](https://arxiv.org/abs/2308.00442) | [official](https://github.com/LeapLabTHU/FLatten-Transformer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/layers/focused_la.py)          |
 | 2025 | PolaFormer| PolaFormer: Polarity-aware Linear Attention for Vision Transformers    | [arxiv](https://arxiv.org/abs/2501.15061) | [official](https://github.com/ZacharyMeng/PolaFormer) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/layers/polaformer.py)                 |
 | 2025 | RALA| Breaking the Low-Rank Dilemma of Linear Attention   | [arxiv](https://arxiv.org/abs/2411.07635) | [official](https://github.com/qhfan/RALA) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/rala.py)   
 | 2026 | PISA      | PISA: Piecewise Sparse Attention Is Wiser for Efficient Diffusion Transformers               | [arxiv](https://arxiv.org/abs/2602.01077) | [official](https://github.com/xie-lab-ml/piecewise-sparse-attention)               | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/ops/piecewise_attn/kernel.py)                
@@ -43,13 +42,14 @@ import torch
 from diffusers import AutoPipelineForText2Image
 from flash_bla.models import LinFusion
 
-sd_repo = "Lykon/dreamshaper-8"
+sd_repo = "stabilityai/stable-diffusion-xl-base-1.0"
+
 
 pipeline = AutoPipelineForText2Image.from_pretrained(
     sd_repo, torch_dtype=torch.float16, variant="fp16"
 ).to(torch.device("cuda"))
 
-linfusion = LinFusion.construct_for(pipeline)
+linfusion = LinFusion.construct_for(pipeline, pretrained_model_name_or_path="Yuanshi/LinFusion-XL")
 
 image = pipeline(
     "An astronaut floating in space. Beautiful view of the stars and the universe in the background.",

@@ -1,4 +1,4 @@
-from fbi_la.models.linfusion import LinFusion
+from .linfusion.modeling_linfusion import LinFusion
 
 __all__ = [
     'LinFusion',

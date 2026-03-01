@@ -17,7 +17,7 @@ from diffusers.models.attention_processor import Attention
 from diffusers import ModelMixin, ConfigMixin
 import functools
 
-from fbi_la.layers import GeneralizedLinearAttention
+from flash_bla.layers import GeneralizedLinearAttention
 
 
 model_dict = {
