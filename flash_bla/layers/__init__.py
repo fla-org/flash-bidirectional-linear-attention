@@ -6,4 +6,5 @@ __all__ = [
     'GeneralizedLinearAttention',
     'FocusedLinearAttention',
     'MambaLikeLinearAttention',
+    'RALALinearAttention',
 ]
