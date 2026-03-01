@@ -11,12 +11,12 @@ The aim of this repository is to implement **bidirectional linear attention** fo
 </div>
 
 
-# Update
+## Update
 * [2026/02] Update PISA
 * [2025/02] Update PolaFormer
 * [2024/12] Update `simple_la`, a simple form of `linear_attn` without the norm term.
 
-# Models
+## Models
 Roughly sorted according to the timeline supported in `flash_bla`
 
 | Year    | Model     | Title                                                                  | Paper                                     | Code                                                          | `fla` impl                                                                                                           |
@@ -27,15 +27,15 @@ Roughly sorted according to the timeline supported in `flash_bla`
 | 2025 | RALA| Breaking the Low-Rank Dilemma of Linear Attention   | [arxiv](https://arxiv.org/abs/2411.07635) | [official](https://github.com/qhfan/RALA) | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/fbi_la/layers/rala.py)   
 | 2026 | PISA      | PISA: Piecewise Sparse Attention Is Wiser for Efficient Diffusion Transformers               | [arxiv](https://arxiv.org/abs/2602.01077) | [official](https://github.com/xie-lab-ml/piecewise-sparse-attention)               | [code](https://github.com/hp-l33/flash-bidirectional-linear-attention/blob/main/flash_bla/ops/piecewise_attn/kernel.py)                
 
-# Usage
+## Usage
 
-## Installation
+### Installation
 ``` shell
 git clone https://github.com/fla-org/flash-bidirectional-linear-attention.git
 pip install -e flash-bidirectional-linear-attention/.
 ```
 
-## Integrated Models
+### Integrated Models
 This library has integrated some models, which can be called directly. Taking [LinFusion](https://github.com/Huage001/LinFusion) as an example:
 ``` python
 import torch
@@ -57,7 +57,7 @@ image = pipeline(
 ).images[0]
 ```
 
-# Benchmarks
+## Benchmarks
 Profiled on the A800-80G GPU.
 ```shell
 B8-H16-D64:
@@ -69,7 +69,7 @@ B8-H16-D64:
 ```
 
 
-# Acknowledgments
+## Acknowledgments
 Thanks to the following repositories for their inspiration:
 - [flash-attention](https://github.com/Dao-AILab/flash-attention)
 - [flash-linear-attention](https://github.com/sustcsonglin/flash-linear-attention)
