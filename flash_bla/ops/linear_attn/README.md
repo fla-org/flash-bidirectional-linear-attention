@@ -19,3 +19,28 @@ z = q @ k.mean(dim=-2, keepdim=True).transpose(-2, -1)
 s = (k.transpose(-2, -1) * scale) @ v
 o = q @ s / (z + 1e-6)
 ```
+
+## Packed variable-length sequences
+
+`varlen_linear_attention` applies the same bidirectional attention independently
+to sequences stored in one packed tensor:
+
+```python
+from flash_bla.ops.linear_attn.varlen import varlen_linear_attention
+
+# q, k: (total_tokens, heads, key_dim)
+# v:    (total_tokens, heads, value_dim)
+# cu_seqlens: int32 tensor containing [0, ..., total_tokens]
+o = varlen_linear_attention(
+    q,
+    k,
+    v,
+    cu_seqlens=cu_seqlens,
+    max_seqlen=max_seqlen,
+)
+```
+
+`cu_seqlens` must start at zero, `max_seqlen` must be at least the largest
+difference between adjacent entries. The current kernel supports key and value
+dimensions from 1 through 128. When `scale` is not provided, each sequence is
+scaled by the reciprocal of its own length.
